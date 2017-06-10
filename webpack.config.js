@@ -7,25 +7,27 @@ var webpack = require('webpack');
 // var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   entry: {
     app: [
-      'react-hot-loader/patch',
+      // 'react-hot-loader/patch',
       'webpack-dev-server/client?http://0.0.0.0:8080',
-      'webpack/hot/only-dev-server',
+      // 'webpack/hot/only-dev-server',
       // 'babel-polyfill',
       // 'whatwg-fetch',
       './src/index.js'
     ]
   },
-  debug: true,
+  // debug: true,
   output: {
     path: path.join(__dirname, './dist'),
     filename: 'bundle.js',
     // publicPath: './dist'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({
+      React: 'react'
+    })
   ],
   module: {
     rules: [
@@ -33,11 +35,15 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules)/,
         use: {
-          loader: 'react-hot-loader/babel-loader',
+          loader: 'babel-loader',
           options: {
             presets: ['es2015', 'react']
           }
         }
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
       }
     ]
   }
